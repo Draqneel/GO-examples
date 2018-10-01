@@ -42,7 +42,13 @@ func main() {
 	HashMap["birthMonth"] = 4
 	HashMap["birthYear"] = 1999
 	// empty map = nil (nil == null)
-	fmt.Println("Uninitialized map", HashMap)
+	// exist value under key or not
+	// we can use int variable vice "_" but we'll have to use it
+	if _, exist := HashMap["birthDay"]; exist {
+		fmt.Println(HashMap, "is exist birthDay?", exist)
+	} else {
+		fmt.Println("Not exist")
+	}
 }
 
 // factorial
