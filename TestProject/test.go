@@ -11,13 +11,11 @@ func main() {
 	// slice == ArrayList in GO () => slice is reference type
 	// in variable "ArrayList" created slice ([]int) with size (0) and capacity (10)
 	ArrayList := make([]int, 0, 10)
-	i := 0
-	for i < 5 {
+	for i := 1; i < 5; i++ {
 		// we can append not only elements of current data type
 		// and yet other slice (all elements from 2nd slice will be added in 1st)
 		// and parts of slices
 		ArrayList = append(ArrayList, 5)
-		i++
 	}
 	// create slice two with size equals slice one
 	ArrayListTwo := make([]int, len(ArrayList))
@@ -48,6 +46,10 @@ func main() {
 		fmt.Println(HashMap, "is exist birthDay?", exist)
 	} else {
 		fmt.Println("Not exist")
+	}
+	//output map in the loop (foreach)
+	for index, value := range HashMap {
+		fmt.Println(value,"-",index)
 	}
 }
 
