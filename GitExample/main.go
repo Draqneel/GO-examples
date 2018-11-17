@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
-func main()  {
-	fmt.Println("We add 1st commit")
+func main(){
+	fmt.Println("Add 1st commit")
+	fmt.Println("Add 2nd commit")
 }
