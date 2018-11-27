@@ -1,0 +1,2 @@
+<IN THIS FILE MUST BE DATA FROM>
+https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
