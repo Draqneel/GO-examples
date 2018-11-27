@@ -1,2 +1,4 @@
 "password", md5:
-main.exe md5 dictionaty.txt 5f4dcc3b5aa765d61d8327deb882cf99
+go run main.go md5 dictionary.txt 5f4dcc3b5aa765d61d8327deb882cf99
+"cat223", md5:
+go run main.go md5 dictionary.txt f6b62c13138d4f4676264878be41ca1c
