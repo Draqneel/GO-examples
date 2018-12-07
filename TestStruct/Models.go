@@ -54,3 +54,12 @@ func (robot *BattleRobot) attack(count int64)  {
 	robot.Cartridges = robot.Cartridges - count
 }
 
+// 3st struct
+
+type Weapon struct {
+	weight int;
+	length int;
+	damage int;
+}
+
+
