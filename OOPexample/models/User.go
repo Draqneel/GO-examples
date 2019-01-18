@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	id int64
-	name string
+	id      int64
+	name    string
 	surname string
-	salary int
+	salary  int
 }
 
 func NewUser(name string, surmane string, salary int) *User {
@@ -18,5 +18,3 @@ func NewUser(name string, surmane string, salary int) *User {
 func (user *User) GetSalary() int {
 	return user.salary
 }
-
-

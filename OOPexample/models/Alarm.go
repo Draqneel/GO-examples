@@ -9,5 +9,3 @@ type Alarm interface {
 	SetAlarmSound(string)
 	Play()
 }
-
-
