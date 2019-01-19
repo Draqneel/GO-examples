@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-var stuff  = "not ready"
+var stuff = "not ready"
 
 func main() {
 	// testing functions
@@ -35,14 +35,14 @@ func sum(argument ...int) (sum int) {
 	return
 }
 
-func inc(x *int)  {
+func inc(x *int) {
 	*x = *x + 1
 }
 
-func panicTest()  {
+func panicTest() {
 	// error processing
 	defer func() {
-		if r:=recover(); r != nil {
+		if r := recover(); r != nil {
 			fmt.Println("PANIC UNDER CONTROL!!!")
 		}
 	}()
