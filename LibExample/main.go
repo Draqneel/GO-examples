@@ -5,24 +5,25 @@ import (
 	"sync"
 )
 
+// test public struct
 type MyObj struct {
 	dataMutex *sync.Mutex
-	data []int
-	count int
+	data      []int
+	count     int
 }
 
-func (obj *MyObj) addData(value int)  {
+func (obj *MyObj) addData(value int) {
 	obj.dataMutex.Lock()
 	defer obj.dataMutex.Unlock()
 	obj.data[obj.count] = value
-	obj.count ++
+	obj.count++
 }
 
-func main()  {
+func main() {
 	obj := MyObj{
-		data: make([]int, 5),
+		data:      make([]int, 5),
 		dataMutex: new(sync.Mutex),
-		count: 0,
+		count:     0,
 	}
 	obj.addData(10)
 	obj.addData(50)
@@ -31,15 +32,15 @@ func main()  {
 	//
 
 	wg := new(sync.WaitGroup)
-	for i:=0;i<10;i++ {
+	for i := 0; i < 10; i++ {
 		go Print("Piece", wg)
 	}
 	wg.Wait()
 }
 
-func Print(word string, wg *sync.WaitGroup)  {
+// test public method
+func Print(word string, wg *sync.WaitGroup) {
 	wg.Add(1)
 	defer wg.Done()
 	fmt.Println(word)
 }
-
