@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-// test public struct
+// MyObj - test public struct
 type MyObj struct {
 	dataMutex *sync.Mutex
 	data      []int
@@ -38,7 +38,7 @@ func main() {
 	wg.Wait()
 }
 
-// test public method
+// Print - test public method
 func Print(word string, wg *sync.WaitGroup) {
 	wg.Add(1)
 	defer wg.Done()
