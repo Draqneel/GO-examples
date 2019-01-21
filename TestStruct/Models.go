@@ -3,9 +3,9 @@ package main
 // 1st STRUCT and this methods
 
 type User struct {
-	Name string
+	Name    string
 	Surname string
-	Age int8
+	Age     int8
 }
 
 // we can change object in this method
@@ -13,7 +13,7 @@ func (user *User) getAge() int8 {
 	return user.Age
 }
 
-func (user *User) agePP()  {
+func (user *User) agePP() {
 	user.Age++
 }
 
@@ -21,7 +21,7 @@ func (user *User) agePP()  {
 
 type lowCaseUser struct {
 	name string
-	age int8
+	age  int8
 }
 
 // we can't change object in this method
@@ -29,7 +29,7 @@ func (lowUser lowCaseUser) getLowAge() int8 {
 	return lowUser.age
 }
 
-func (lowUser lowCaseUser) lowAgePP()  {
+func (lowUser lowCaseUser) lowAgePP() {
 	lowUser.age++
 }
 
@@ -50,16 +50,14 @@ type BattleRobot struct {
 	Cartridges int64
 }
 
-func (robot *BattleRobot) attack(count int64)  {
+func (robot *BattleRobot) attack(count int64) {
 	robot.Cartridges = robot.Cartridges - count
 }
 
 // 3st struct
 
 type Weapon struct {
-	weight int;
-	length int;
-	damage int;
+	weight int
+	length int
+	damage int
 }
-
-

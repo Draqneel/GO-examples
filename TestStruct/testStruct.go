@@ -2,9 +2,9 @@ package main
 
 import "fmt"
 
-func main()  {
+func main() {
 	// testing work with fields of public structures
-	user := User{"Anton","Tikhonov",19}
+	user := User{"Anton", "Tikhonov", 19}
 	userTwo := User{"Anatoliy", "Plotnitskiy", 20}
 	userThree := User{
 		Age: 99,
@@ -19,10 +19,10 @@ func main()  {
 	lowUser := lowCaseUser{"Vasya", 88}
 	fmt.Println(lowUser.getLowAge())
 	lowAgePP := lowUser.lowAgePP
-	fmt.Println(lowUser.getLowAge()," < ", lowAgePP)
+	fmt.Println(lowAgePP, " < ", lowAgePP)
 
 	// extends example
-	 robot1 := BattleRobot{Robot{1, 2}, 100}
-	 robot1.attack(50)
-	 fmt.Println(robot1)
+	robot1 := BattleRobot{Robot{1, 2}, 100}
+	robot1.attack(50)
+	fmt.Println(robot1)
 }
