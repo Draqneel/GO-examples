@@ -9,10 +9,10 @@ const maxvalue = 1000000000
 
 func main() {
 	var (
-	 fistBoard int
-	 secondBoard int
-	 checkDay int = 0
-	 result int = 0
+		fistBoard   int
+		secondBoard int
+		checkDay    int = 0
+		result      int = 0
 	)
 	fmt.Println("Add 1st value")
 	fmt.Scan(&fistBoard)
@@ -27,16 +27,16 @@ func main() {
 		if checkDay > secondBoard {
 			break
 		}
-		checkDay += 1
-		if (checkDay >= fistBoard)&&(checkDay <= secondBoard){
+		checkDay++
+		if (checkDay >= fistBoard) && (checkDay <= secondBoard) {
 			result++
 		}
 		checkDay += 2
-		if (checkDay >= fistBoard)&&(checkDay <= secondBoard){
+		if (checkDay >= fistBoard) && (checkDay <= secondBoard) {
 			result++
 		}
 		checkDay += 4
-		if (checkDay >= fistBoard)&&(checkDay <= secondBoard){
+		if (checkDay >= fistBoard) && (checkDay <= secondBoard) {
 			result++
 		}
 		checkDay += 3
