@@ -26,7 +26,13 @@ func main() {
 func findTwoOldestValue(slice []int) (int, int) {
 	maxOne := slice[0]
 	maxTwo := math.MinInt8
-	for _, element := range slice {
+	for i, element := range slice {
+		// in default Max One element equals slice[0]
+		// we don't need to check it
+		if i == 0 {
+			continue
+		}
+
 		if element > maxOne {
 			maxTwo = maxOne
 			maxOne = element
