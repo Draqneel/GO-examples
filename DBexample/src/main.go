@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	dbUser     = "r"
-	dbPassword = "word"
-	dbName     = "me"
+	dbUser     = "your_user"
+	dbPassword = "your_password"
+	dbName     = "your_username"
 )
 
 func main() {
