@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GO-examples/DBexample/src/models"
 	"database/sql"
 	"fmt"
 
@@ -24,13 +25,10 @@ func main() {
 	panicHandler(err)
 
 	for result.Next() {
-		var index int
-		var age int
-		var name string
-		var citizen string
-		err := result.Scan(&index, &age, &name, &citizen)
+		user := models.NullArgsConstructorUser()
+		err := result.Scan(user.GetIndex(), user.GetAge(), user.GetName(), user.GetCitizen())
 		panicHandler(err)
-		fmt.Printf("His name is %s it was %d years old, living in %s, with index %d\n", name, age, citizen, index)
+		fmt.Printf("His name is %s it was %d years old, living in %s, with index %d\n", *user.GetName(), *user.GetAge(), *user.GetCitizen(), *user.GetIndex())
 	}
 	result.Close()
 	defer db.Close()
