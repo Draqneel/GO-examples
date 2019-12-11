@@ -8,16 +8,15 @@ import (
 )
 
 func main() {
+	var links []string
+	var titles []string
+	var reductions []string
+
 	resp, err := http.Get("https://coinmarketcap.com/ru/coins/views/all/")
 	errProcessing(err)
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	errProcessing(err)
-	var links []string
-	var titles []string
-	var reductions []string
-
-
 
 	doc.Find(".kQmhAn td .eTVhdN").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the band and title
