@@ -8,22 +8,26 @@ import (
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"log"
-	"math/rand"
 	//"log"
 	"net/http"
-	"strconv"
 	//"encoding/json"
 	//"github.com/gorilla/mux"
 )
 
 type BankRepo struct {
-	users        []models.User
-	employees    []models.Employee
-	clients      []models.Client
-	branches     []models.Branch
-	balances     []models.Balance
-	transactions []models.Transaction
-	db           *sql.DB
+	users        		[]models.User
+	usersFlag	 		bool
+	employees    		[]models.Employee
+	employeesFlag		bool
+	clients      		[]models.Client
+	clientsFlag			bool
+	branches     		[]models.Branch
+	branchesFlag		bool
+	balances     		[]models.Balance
+	balancesFlag		bool
+	transactions 		[]models.Transaction
+	transactionsFlag	bool
+	db           		*sql.DB
 }
 
 func NewBankRepo(dbUser string, dbPassword string, dbName string) *BankRepo {
@@ -40,10 +44,18 @@ func NewBankRepo(dbUser string, dbPassword string, dbName string) *BankRepo {
 // Work with users
 
 func (repo *BankRepo) GetUsersList() []models.User {
+	if repo.usersFlag == true {
+		return repo.users
+	}
+
 	result, err := repo.db.Query("SELECT * FROM users")
 
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if len(repo.users) > 0 {
+		repo.users = nil
 	}
 
 	for result.Next() {
@@ -55,62 +67,71 @@ func (repo *BankRepo) GetUsersList() []models.User {
 		repo.users = append(repo.users, user)
 	}
 	result.Close()
+
+	repo.usersFlag = true
+
 	return repo.users
 }
 
+func (repo *BankRepo) CreateUser(user *models.User) bool {
+	_, err := repo.db.Query(
+		"INSERT INTO users(login, hash_password, full_name, phone_number, email) VALUES ($1,$2,$3,$4,$5)",
+				user.Login, user.HashPassword, user.FullName, user.PhoneNumber, user.Email)
 
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
 
-//func (repo *BankRepo) GetUser(writer http.ResponseWriter, request *http.Request){
-//	writer.Header().Set("Content-Type", "application/json")
-//	params := mux.Vars(request)
-//
-//	_ = json.NewEncoder(writer).Encode(&models.User{})
-//}
+	repo.usersFlag = false
 
-func (repo *BankRepo) CreateUser(writer http.ResponseWriter, request *http.Request){
-	fmt.Print("Пытаюсь создать юзера")
-	writer.Header().Set("Content-Type", "application/json")
+	return true
+}
+
+func (repo *BankRepo) UpdateUser(user *models.User, id int) bool {
+	_, err := repo.db.Query("UPDATE users SET login = $1, hash_password=$2, full_name=$3, phone_number=$4, email=$5 " +
+		"WHERE user_id=$6", user.Login, user.HashPassword, user.FullName, user.PhoneNumber, user.Email, id)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+
+	repo.usersFlag = false
+
+	return  true
+}
+
+func (repo *BankRepo) GetUserById(id int) *models.User{
+	rows, err := repo.db.Query("SELECT * FROM users WHERE user_id = $1", id)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var user models.User
-	_ = json.NewDecoder(request.Body).Decode(&user)
-	user.ID = strconv.Itoa(rand.Intn(1000000))
-	repo.users = append(repo.users, user)
-	fmt.Print(user)
-	_ = json.NewEncoder(writer).Encode(user)
-}
 
-func (repo *BankRepo) UpdateUser(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(request)
-	for index, item := range repo.users {
-		if item.ID == params["id"] {
-			repo.users = append(repo.users[:index], repo.users[index+1:]...)
-			var user models.User
-			_ = json.NewDecoder(request.Body).Decode(&user)
-			user.ID = params["id"]
-			repo.users = append(repo.users, user)
-			_ = json.NewEncoder(writer).Encode(user)
-			return
+	for rows.Next() {
+		err := rows.Scan(&user.ID, &user.Login, &user.HashPassword, &user.FullName, &user.PhoneNumber, &user.Email)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
-	_ = json.NewEncoder(writer).Encode(repo.users)
+
+	return &user
 }
 
-func (repo *BankRepo) DeleteUser(writer http.ResponseWriter, request *http.Request){
-	writer.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(request)
-	for i, item := range repo.users {
-		if item.ID == params["id"] {
-			// *My deleting algorithm, it must be faster*
-			//fmt.Print("before:",repo.users)
-			//repo.users[i] = repo.users[len(repo.users)-1]
-			//repo.users[len(repo.users)-1] = models.User{}
-			//repo.users = repo.users[:len(repo.users) - 1]
-			//fmt.Print("after:",repo.users)
-			repo.users = append(repo.users[:i], repo.users[i+1:]...)
-			break
-		}
+func (repo *BankRepo) DeleteUserById(id int) bool {
+	_, err := repo.db.Query("DELETE FROM users WHERE user_id = $1", id)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
 	}
+
+	return true
 }
+
 // Work with employees
 
 func (repo *BankRepo) getAllEmployees(writer http.ResponseWriter, request *http.Request) {
