@@ -19,10 +19,10 @@ func main(){
 	repository := repositories.NewBankRepo(dbUser, dbPassword, dbName)
 	controller := controllers.GetNewDataController(repository)
 
-	router.HandleFunc("/clients", controller.GetAllUsersController).Methods("GET")
-	router.HandleFunc("/client", controller.CreateUserController).Methods("POST")
-	router.HandleFunc("/client/{id}", controller.UpdateUser).Methods("PUT")
-	router.HandleFunc("/client/{id}", controller.DeleteUser).Methods("DELETE")
+	router.HandleFunc("/users", controller.GetAllUsersController).Methods("GET")
+	router.HandleFunc("/user", controller.CreateUserController).Methods("POST")
+	router.HandleFunc("/user/{id}", controller.UpdateUser).Methods("PUT")
+	router.HandleFunc("/user/{id}", controller.DeleteUser).Methods("DELETE")
 
 
 	log.Fatal(http.ListenAndServe(":8000", router))

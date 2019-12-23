@@ -1,5 +1,9 @@
 # REST documentation
 
+*/users* - list of all users (GET)  
+*/user/{id}* - get user by id (GET)  
+*/user/{id}* - delete user by id (DELETE)  
+*/user/{id}* - update user by id (PUT)  
 */clients* - list of all clients (GET)  
 */client/{id}* - get client by id (GET)  
 */client/{id}* - delete client by id (DELETE)  
