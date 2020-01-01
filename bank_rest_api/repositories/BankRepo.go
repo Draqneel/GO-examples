@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"log"
+	"strconv"
+
 	//"log"
 	"net/http"
 	//"encoding/json"
@@ -134,22 +136,83 @@ func (repo *BankRepo) DeleteUserById(id int) bool {
 
 // Work with employees
 
-func (repo *BankRepo) getAllEmployees(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(writer).Encode(repo.employees)
+func (repo *BankRepo) GetEmployeesList() []models.Employee {
+	if repo.employeesFlag == true {
+		return repo.employees
+	}
+
+	result, err := repo.db.Query("SELECT * FROM employee")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(repo.employees) > 0 {
+		repo.users = nil
+	}
+
+	for result.Next() {
+		var employee models.Employee
+		err := result.Scan(&employee.UserId, &employee.BranchId, &employee.Role, &employee.Experience)
+
+		userId, err := strconv.Atoi(employee.UserId)
+		branchId, err := strconv.Atoi(employee.BranchId)
+
+		employee.User = *repo.GetUserById(userId)
+		employee.Branch = *repo.GetBranchById(branchId)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		repo.employees = append(repo.employees, employee)
+	}
+	result.Close()
+
+	repo.employeesFlag = true
+
+	return repo.employees
 }
 
-func (repo *BankRepo) getEmployee(writer http.ResponseWriter, request *http.Request){
-	writer.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(request)
-	for _, item := range repo.employees {
-		if item.ID == params["id"] {
-			_ = json.NewEncoder(writer).Encode(item)
-			return
+func (repo *BankRepo) GetEmployeeById(id int) *models.Employee{
+	rows, err := repo.db.Query("SELECT * FROM employee WHERE user_id = $1", id)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var employee models.Employee
+
+	for rows.Next() {
+		err := rows.Scan(&employee.UserId, &employee.BranchId, &employee.Role, &employee.Experience)
+		userId, err := strconv.Atoi(employee.UserId)
+		branchId, err := strconv.Atoi(employee.BranchId)
+
+		employee.User = *repo.GetUserById(userId)
+		employee.Branch = *repo.GetBranchById(branchId)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
-	_ = json.NewEncoder(writer).Encode(&models.Employee{})
+
+	return &employee
 }
+
+func (repo *BankRepo) CreateEmployee(employee *models.Employee) bool {
+	_, err := repo.db.Query(
+		"INSERT INTO employee(user_id, branch_id, role, experience) VALUES ($1,$2,$3,$4)",
+		employee.UserId, employee.BranchId, employee.Role, employee.Experience)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+
+	repo.employeesFlag = false
+
+	return true
+}
+
+
 // Work with clients
 
 func (repo *BankRepo) getAllClients(writer http.ResponseWriter, request *http.Request) {
@@ -169,6 +232,25 @@ func (repo *BankRepo) getClient(writer http.ResponseWriter, request *http.Reques
 	_ = json.NewEncoder(writer).Encode(&models.Client{})
 }
 // Work with branches
+
+func (repo *BankRepo) GetBranchById(id int) *models.Branch{
+	rows, err := repo.db.Query("SELECT * FROM branch WHERE branch_id = $1", id)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var branch models.Branch
+
+	for rows.Next() {
+		err := rows.Scan(&branch.ID, &branch.Address)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return &branch
+}
 
 func (repo *BankRepo) getAllBranches(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")

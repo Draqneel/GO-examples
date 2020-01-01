@@ -60,3 +60,20 @@ func (controller *DataController) DeleteUser(writer http.ResponseWriter, request
 
 	controller.repo.DeleteUserById(deleteUserId)
 }
+
+func (controller *DataController) GetAllEmployees(writer http.ResponseWriter, request *http.Request)  {
+	writer.Header().Set("Content-Type", "application/json")
+	employees := controller.repo.GetEmployeesList()
+	_ = json.NewEncoder(writer).Encode(employees)
+}
+
+func (controller *DataController) CreateEmployeeController(writer http.ResponseWriter, request *http.Request)  {
+	writer.Header().Set("Content-Type", "application/json")
+	var employee models.Employee
+
+	_ = json.NewDecoder(request.Body).Decode(&employee)
+	controller.repo.CreateEmployee(&employee)
+
+	_ = json.NewEncoder(writer).Encode(employee)
+}
+
